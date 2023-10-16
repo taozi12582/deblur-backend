@@ -1,0 +1,51 @@
+server:
+  port: 9990
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: deblur-gateway-server
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true   #开启Eureka服务发现
+          lower-case-service-id: true
+      routes:
+        - id: motionDeblur
+          uri: lb://motionDeblur
+          predicates:
+            - Path=/motionDeblur/**
+          filters:
+            - StripPrefix= 1 # 忽略的第一个/后面的值
+        - id: fogDeblur
+          uri: lb://fogDeblur
+          predicates:
+            - Path=/fogDeblur/**
+          filters:
+            - StripPrefix= 1 # 忽略的第一个/后面的值
+        - id: deblur-nettyClient-es
+          uri: lb://deblur-nettyClient-es
+          predicates:
+            - Path=/deblur-nettyClient-es/** #断言，路径相匹配的进行路由--------断言也就是匹配方式，当识别到/servero1/**时就会跳转上面的uri
+          filters: #这个必须写
+              - StripPrefix=1  #  请求/name/bar/foo，去除掉前面两个前缀之后，最后转发到目标服务的路径为/foo-----这里写的是只去掉一个，多了自然会导致路径错误，不同的访问url配置也不同
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://202.115.17.206:9001/eureka/ #Eureka Server地址
+  instance:
+    prefer-ip-address: true
+
+ribbon:
+  eureka:
+    enabled: true
+
+deblur-nettyClient-es:
+  ribbon:
+    eureka:
+      enabled: true # 启用Eureka负载均衡
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule # 使用随机负载均衡策略
+
+

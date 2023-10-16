@@ -1,0 +1,14 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: deblur-eureka-server
+
+eureka:
+  instance:
+    hostname: 202.115.17.206
+  client:
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      register-with-eureka: false #是否将自己注册到服务
+      fetch-registry: false

@@ -1,0 +1,16 @@
+server:
+  port: 9995
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: deblur-nettyClient-es
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://202.115.17.206:9001/eureka/
+
+
+
+

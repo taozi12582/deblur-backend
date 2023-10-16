@@ -1,0 +1,12 @@
+server:
+  port: 9994
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: deblur-consumer
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://202.115.17.206:9001/eureka/
